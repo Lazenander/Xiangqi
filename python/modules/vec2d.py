@@ -8,6 +8,12 @@ class Vec2d:
     
     def __sub__(self, other):
         return Vec2d(self.x - other.x, self.y - other.y);
+    
+    def __str__(self):
+        return "("+str(self.x)+", "+str(self.y)+")";
+    
+    def __repr__(self):
+        return "("+str(self.x)+", "+str(self.y)+")";
 
 class Range2d:
     def __init__(self, minVec = Vec2d(), maxVec = Vec2d()):
@@ -27,3 +33,9 @@ class Range2d:
     
     def size(self):
         return Vec2d(self.maxVec.x - self.minVec.x + 1, self.maxVec.y - self.minVec.y + 1);
+    
+    def __str__(self):
+        return "["+str(self.minVec)+":"+str(self.maxVec)+"]";
+    
+    def __repr__(self):
+        return "["+str(self.minVec)+":"+str(self.maxVec)+"]";

@@ -60,7 +60,7 @@ class Guardian(Piece):
         self.moveableRange = Range2d(Vec2d(3, 0), Vec2d(5, 2))
     
     def transition(self):
-        return [Vec2d(1, 1), Vec2d(-1, 1), Vec2d(-1, 1), Vec2d(-1, -1)]
+        return [Vec2d(1, 1), Vec2d(-1, 1), Vec2d(1, -1), Vec2d(-1, -1)]
 
 class Elephant(Piece):
     def __init__(self, index, pos):
@@ -68,7 +68,7 @@ class Elephant(Piece):
         self.moveableRange = Range2d(Vec2d(0, 0), Vec2d(8, 4))
     
     def transition(self):
-        return [Vec2d(2, 2), Vec2d(-2, 2), Vec2d(-2, 2), Vec2d(-2, -2)]
+        return [Vec2d(2, 2), Vec2d(-2, 2), Vec2d(2, -2), Vec2d(-2, -2)]
 
 class Horse(Piece):
     def __init__(self, index, pos):

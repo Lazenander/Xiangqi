@@ -11,5 +11,18 @@ class XiangqiEnv():
         return self.board.board
     
     def step(self, action):
+        signal = False
         killed = self.board.step(action);
-        return killed, self.board.board, killed == 0 or killed == 16 or self.board.doGeneralsMeet()
+        if self.board.doGeneralsMeet():
+            signal = "lose"
+        if killed == 'General':
+            signal = "win"
+        return killed, self.board.board, signal
+
+    def __str__(self):
+        board = self.board.__str__();
+        return board;
+    
+    def __repr__(self):
+        board = self.board.__repr__();
+        return board;

@@ -7,6 +7,15 @@ from pieces import General, Guardian, Elephant, Horse, Chariot, Cannon, Soldier
 from vec2d import Vec2d, Range2d
 import copy
 
+def remove(array, element):
+    poplist = []
+    for i in range(len(array)):
+        if element.x == array[i].x and element.y == array[i].y:
+            poplist.append(i);
+    for i in poplist:
+        array.pop(i);
+    return array
+
 class Board:
     def __init__(self):
         self.rounds = 0;
@@ -82,7 +91,6 @@ class Board:
                        Soldier(29, Vec2d(4, 3)),
                        Soldier(30, Vec2d(6, 3)),
                        Soldier(31, Vec2d(8, 3))];
-        print(self.board)
         self.renderPieces();
     
     def realPos(self, piece):
@@ -97,11 +105,18 @@ class Board:
         else:
             return Vec2d(8 - piece.pos.x, 9 - piece.pos.y);
     
+    def logicPosIndex(self, index, pos):
+        if index < 16:
+            return pos;
+        else:
+            return Vec2d(8 - pos.x, 9 - pos.y);
+    
     def renderPieces(self):
+        self.board = [[-1 for j in range(10)] for i in range(9)];
         for piece in self.pieces:
             pos = self.realPos(piece)
-            print(pos.x, pos.y)
-            self.board[pos.x][pos.y] = piece.index;
+            if piece.isAlive:
+                self.board[pos.x][pos.y] = piece.index;
     
     def isOpponent(self, piece, pos):
         bPieceIndex = self.board[pos.x][pos.y]
@@ -114,8 +129,8 @@ class Board:
     
     def actionSpace(self, index):
         piece = self.pieces[index];
-        type = piece.__class__.__name__;
-        range = piece.moveableRange;
+        type = piece.__class__;
+        moveableRange = piece.moveableRange;
         pos = self.realPos(piece);
         actionSpace = piece.transition();
         extraActionSpace = [];
@@ -123,42 +138,47 @@ class Board:
         if type == Horse:
             if pos.y + 1 < 10 and self.board[pos.x][pos.y + 1] != -1:
                 if piece.index < 16:
-                    actionSpace.remove(Vec2d(1, 2));
-                    actionSpace.remove(Vec2d(-1, 2));
+                    actionSpace = remove(actionSpace, Vec2d(1, 2));
+                    actionSpace = remove(actionSpace, Vec2d(-1, 2));
                 else:
-                    actionSpace.remove(Vec2d(1, -2));
-                    actionSpace.remove(Vec2d(-1, -2));
-            if pos.y + 1 < 10 and self.board[pos.x][pos.y - 1] != -1:
+                    actionSpace = remove(actionSpace, Vec2d(1, -2));
+                    actionSpace = remove(actionSpace, Vec2d(-1, -2));
+            if pos.y - 1 >= 0 and self.board[pos.x][pos.y - 1] != -1:
                 if piece.index < 16:
-                    actionSpace.remove(Vec2d(1, -2));
-                    actionSpace.remove(Vec2d(-1, -2));
+                    actionSpace = remove(actionSpace, Vec2d(1, -2));
+                    actionSpace = remove(actionSpace, Vec2d(-1, -2));
                 else:
-                    actionSpace.remove(Vec2d(1, 2));
-                    actionSpace.remove(Vec2d(-1, 2));
-            if pos.y + 1 < 10 and self.board[pos.x + 1][pos.y] != -1:
+                    actionSpace = remove(actionSpace, Vec2d(1, 2));
+                    actionSpace = remove(actionSpace, Vec2d(-1, 2));
+            if pos.x + 1 < 9 and self.board[pos.x + 1][pos.y] != -1:
                 if piece.index < 16:
-                    actionSpace.remove(Vec2d(2, 1));
-                    actionSpace.remove(Vec2d(2, -1));
+                    actionSpace = remove(actionSpace, Vec2d(2, 1));
+                    actionSpace = remove(actionSpace, Vec2d(2, -1));
                 else:
-                    actionSpace.remove(Vec2d(-2, 1));
-                    actionSpace.remove(Vec2d(-2, -1));
-            if pos.y + 1 < 10 and self.board[pos.x - 1][pos.y] != -1:
+                    actionSpace = remove(actionSpace, Vec2d(-2, 1));
+                    actionSpace = remove(actionSpace, Vec2d(-2, -1));
+            if pos.x - 1 >= 0 and self.board[pos.x - 1][pos.y] != -1:
                 if piece.index < 16:
-                    actionSpace.remove(Vec2d(-2, 1));
-                    actionSpace.remove(Vec2d(-2, -1));
+                    actionSpace = remove(actionSpace, Vec2d(-2, 1));
+                    actionSpace = remove(actionSpace, Vec2d(-2, -1));
                 else:
-                    actionSpace.remove(Vec2d(2, 1));
-                    actionSpace.remove(Vec2d(2, -1));
-                
+                    actionSpace = remove(actionSpace, Vec2d(2, 1));
+                    actionSpace = remove(actionSpace, Vec2d(2, -1));
+            
+            poplist = [];
+            
             for i in range(len(actionSpace)):
                 newPiece = copy.deepcopy(piece);
                 newPiece.move(actionSpace[i]);
                 newPos = self.realPos(newPiece);
-                if range.isInRange() == False or (self.board[newPos.x][newPos.y] != -1 and self.isOpponent(piece, newPos) == False):
-                    actionSpace.pop(i);
+                if moveableRange.isInRange(newPiece.pos) == False or (self.board[newPos.x][newPos.y] != -1 and self.isOpponent(piece, newPos) == False):
+                    poplist.append(i)
+            poplist.sort();
+            poplist.reverse();
+            for popindex in poplist:
+                actionSpace.pop(popindex)
             
             return actionSpace
-            
         
         if type == Chariot or type == Cannon:
             for i in range(pos.x):
@@ -174,22 +194,22 @@ class Board:
                         if self.isOpponent(piece, Vec2d(pos.x - j - 1, pos.y)):
                             extraActionSpace.append(Vec2d(pos.x - j - 1, pos.y));
                         break;
-                range.minVec.x = pos.x - i
+                moveableRange.minVec.x = pos.x - i
                 break;
-            for i in range(pos.x, 9):
+            for i in range(pos.x, 8):
                 if self.board[i + 1][pos.y] == -1:
                     continue
                 if self.isOpponent(piece, Vec2d(i + 1, pos.y)):
                     if type == Chariot:
                         extraActionSpace.append(Vec2d(i + 1, pos.y));
                 if type == Cannon:
-                    for j in range(i + 1, 9):
+                    for j in range(i + 1, 8):
                         if self.board[j + 1][pos.y] == -1:
                             continue
                         if self.isOpponent(piece, Vec2d(j + 1, pos.y)):
                             extraActionSpace.append(Vec2d(j + 1, pos.y));
                         break;
-                range.maxVec.x = i
+                moveableRange.maxVec.x = i
                 break
             for i in range(pos.y):
                 if self.board[pos.x][pos.y - i - 1] == -1:
@@ -204,35 +224,40 @@ class Board:
                         if self.isOpponent(piece, Vec2d(pos.x, pos.y - j - 1)):
                             extraActionSpace.append(Vec2d(pos.x, pos.y - j - 1));
                         break;
-                range.minVec.y = pos.y - i
+                moveableRange.minVec.y = pos.y - i
                 break
-            for i in range(pos.y, 10):
+            for i in range(pos.y, 9):
                 if self.board[pos.x][i + 1] == -1:
                     continue
                 if self.isOpponent(piece, Vec2d(pos.x, i + 1)):
                     if type == Chariot:
                         extraActionSpace.append(Vec2d(pos.x, i + 1));
                 if type == Cannon:
-                    for j in range(i + 1, 10):
+                    for j in range(i + 1, 9):
                         if self.board[pos.x][j + 1] == -1:
                             continue
                         if self.isOpponent(piece, Vec2d(pos.x, j + 1)):
                             extraActionSpace.append(Vec2d(pos.x, j + 1));
                         break;
-                range.maxVec.y = i
+                moveableRange.maxVec.y = i
                 break
             
-        print(extraActionSpace)
-            
         for i in range(len(extraActionSpace)):
-            extraActionSpace[i] = self.logicPos(extraActionSpace[i]);
+            extraActionSpace[i] = self.logicPosIndex(index, extraActionSpace[i]) - self.pieces[index].pos;
+        
+        poplist = []
         
         for i in range(len(actionSpace)):
             newPiece = copy.deepcopy(piece);
             newPiece.move(actionSpace[i]);
             newPos = self.realPos(newPiece);
-            if range.isInRange() == False or (self.board[newPos.x][newPos.y] != -1 and self.isOpponent(piece, newPos) == False):
-                actionSpace.pop(i);
+            if moveableRange.isInRange(newPiece.pos) == False or (self.board[newPos.x][newPos.y] != -1 and self.isOpponent(piece, newPos) == False):
+                poplist.append(i)
+        poplist.sort();
+        poplist.reverse();
+        
+        for popindex in poplist:
+            actionSpace.pop(popindex)
         
         return actionSpace + extraActionSpace
     
@@ -255,16 +280,16 @@ class Board:
     def step(self, action):
         #action should be in the form of: [(integer)pieceIndex, (Vec2d)action]
         if self.turn == "black":
-            piece = self.pieces[action[0] + 16];
+            pieceIndex = action[0] + 16;
             self.turn = "red"
-            self.round += 1;
+            self.rounds += 1;
         else:
-            piece = self.pieces[action[0]];
+            pieceIndex = action[0];
             self.turn = "black"
-        piece.move(action[1]);
+        self.pieces[pieceIndex].move(action[1]);
         killed = None
-        pos = self.realPos(piece)
-        if self.isOpponent(piece, pos):
+        pos = self.realPos(self.pieces[pieceIndex])
+        if self.isOpponent(self.pieces[pieceIndex], pos):
             oppIndex = self.board[pos.x][pos.y]
             self.pieces[oppIndex].isAlive = False;
             killed = self.pieces[oppIndex].__class__.__name__
@@ -280,3 +305,45 @@ class Board:
                     return False;
             return True
         return False
+    
+    def __str__(self):
+        self.renderPieces();
+        ret = ""
+        for i in range(10):
+            for j in range(9):
+                prt = "  "
+                if self.board[j][9-i] == 0:
+                    prt = "将"
+                elif self.board[j][9-i] == 1 or self.board[j][9-i] == 2:
+                    prt = "士"
+                elif self.board[j][9-i] == 3 or self.board[j][9-i] == 4:
+                    prt = "象"
+                elif self.board[j][9-i] == 5 or self.board[j][9-i] == 6:
+                    prt = "马"
+                elif self.board[j][9-i] == 7 or self.board[j][9-i] == 8:
+                    prt = "车"
+                elif self.board[j][9-i] == 9 or self.board[j][9-i] == 10:
+                    prt = "炮"
+                elif self.board[j][9-i] >= 11 and self.board[j][9-i] <= 15:
+                    prt = "兵"
+                elif self.board[j][9-i] == 16:
+                    prt = "将"
+                elif self.board[j][9-i] == 17 or self.board[j][9-i] == 18:
+                    prt = "士"
+                elif self.board[j][9-i] == 19 or self.board[j][9-i] == 20:
+                    prt = "象"
+                elif self.board[j][9-i] == 21 or self.board[j][9-i] == 22:
+                    prt = "马"
+                elif self.board[j][9-i] == 23 or self.board[j][9-i] == 24:
+                    prt = "车"
+                elif self.board[j][9-i] == 25 or self.board[j][9-i] == 26:
+                    prt = "炮"
+                elif self.board[j][9-i] >= 27 and self.board[j][9-i] <= 31:
+                    prt = "兵"
+                ret += prt + " "
+            if i != 9:
+                ret += "\n"
+        return ret
+    
+    def __repr__(self):
+        return self.__str__()
