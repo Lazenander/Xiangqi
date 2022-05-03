@@ -128,7 +128,7 @@ class Board:
             return bPieceIndex > 15;
     
     def actionSpace(self, index):
-        piece = self.pieces[index];
+        piece = copy.deepcopy(self.pieces[index]);
         type = piece.__class__;
         moveableRange = piece.moveableRange;
         pos = self.realPos(piece);
@@ -194,7 +194,10 @@ class Board:
                         if self.isOpponent(piece, Vec2d(pos.x - j - 1, pos.y)):
                             extraActionSpace.append(Vec2d(pos.x - j - 1, pos.y));
                         break;
-                moveableRange.minVec.x = pos.x - i
+                if index < 16:
+                    moveableRange.minVec.x = pos.x - i
+                else:
+                    moveableRange.maxVec.x = 8 - pos.x + i
                 break;
             for i in range(pos.x, 8):
                 if self.board[i + 1][pos.y] == -1:
@@ -209,7 +212,10 @@ class Board:
                         if self.isOpponent(piece, Vec2d(j + 1, pos.y)):
                             extraActionSpace.append(Vec2d(j + 1, pos.y));
                         break;
-                moveableRange.maxVec.x = i
+                if index < 16:
+                    moveableRange.maxVec.x = i
+                else:
+                    moveableRange.minVec.x = 8 - i
                 break
             for i in range(pos.y):
                 if self.board[pos.x][pos.y - i - 1] == -1:
@@ -224,7 +230,10 @@ class Board:
                         if self.isOpponent(piece, Vec2d(pos.x, pos.y - j - 1)):
                             extraActionSpace.append(Vec2d(pos.x, pos.y - j - 1));
                         break;
-                moveableRange.minVec.y = pos.y - i
+                if index < 16:
+                    moveableRange.minVec.y = pos.y - i
+                else:
+                    moveableRange.maxVec.y = 9 - pos.y + i
                 break
             for i in range(pos.y, 9):
                 if self.board[pos.x][i + 1] == -1:
@@ -239,8 +248,16 @@ class Board:
                         if self.isOpponent(piece, Vec2d(pos.x, j + 1)):
                             extraActionSpace.append(Vec2d(pos.x, j + 1));
                         break;
-                moveableRange.maxVec.y = i
+                if index < 16:
+                    moveableRange.maxVec.y = i
+                else:
+                    moveableRange.minVec.y = 9 - i
                 break
+        
+        tmpRange = moveableRange
+        
+        if piece.index < 16:
+            moveableRange.maxVec.y
             
         for i in range(len(extraActionSpace)):
             extraActionSpace[i] = self.logicPosIndex(index, extraActionSpace[i]) - self.pieces[index].pos;
@@ -251,6 +268,8 @@ class Board:
             newPiece = copy.deepcopy(piece);
             newPiece.move(actionSpace[i]);
             newPos = self.realPos(newPiece);
+            if newPiece.__class__ == Cannon:
+                print(newPiece.pos, newPos, moveableRange)
             if moveableRange.isInRange(newPiece.pos) == False or (self.board[newPos.x][newPos.y] != -1 and self.isOpponent(piece, newPos) == False):
                 poplist.append(i)
         poplist.sort();
