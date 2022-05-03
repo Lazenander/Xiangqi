@@ -268,8 +268,6 @@ class Board:
             newPiece = copy.deepcopy(piece);
             newPiece.move(actionSpace[i]);
             newPos = self.realPos(newPiece);
-            if newPiece.__class__ == Cannon:
-                print(newPiece.pos, newPos, moveableRange)
             if moveableRange.isInRange(newPiece.pos) == False or (self.board[newPos.x][newPos.y] != -1 and self.isOpponent(piece, newPos) == False):
                 poplist.append(i)
         poplist.sort();
