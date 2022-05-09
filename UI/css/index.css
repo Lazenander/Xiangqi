@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #e0e0e0;
+}
+
+.container {
+    position: absolute;
+    left: calc(50% - 300px);
+    top: calc(50% - 335px);
+    width: 600px;
+    height: 670px;
+    background: #e0e0e0;
+    box-shadow: 20px 20px 60px #b9b9b9, -20px -20px 60px #ffffff;
+    border-radius: 10px;
+}
+
+.outerBorder {
+    position: absolute;
+    left: calc(50% - 280px);
+    top: calc(50% - 315px);
+    width: 560px;
+    height: 630px;
+    border: 2px solid #646464;
+}
+
+.vertical {
+    position: absolute;
+    width: 0px;
+    height: 280px;
+    border: 1px solid #646464;
+}
+
+.horizontal {
+    position: absolute;
+    width: 560px;
+    height: 0px;
+    border: 1px solid #646464;
+}
+
+.slope1 {
+    position: absolute;
+    width: 198px;
+    height: 0px;
+    border: 1px solid #646464;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.slope2 {
+    position: absolute;
+    width: 198px;
+    height: 0px;
+    border: 1px solid #646464;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.riverContainer {
+    position: absolute;
+    left: 0;
+    top: calc(50% - 35px);
+    width: 100%;
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.riverContainer p {
+    margin: 0;
+    padding: 0;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.dot {
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    width: 0px;
+    height: 0px;
+    border-radius: 50%;
+    border: 5px solid #646464;
+}
