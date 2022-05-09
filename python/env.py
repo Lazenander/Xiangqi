@@ -10,6 +10,9 @@ class XiangqiEnv():
     def state(self):
         return self.board.board
     
+    def reset(self):
+        return self.board.reset()
+    
     def step(self, action):
         signal = False
         killed = self.board.step(action);
