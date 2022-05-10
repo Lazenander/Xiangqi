@@ -1,12 +1,17 @@
+@font-face {
+    font-family: 'LXGW';
+    src: url("../../res/ttf/LXGWBright-Regular.ttf");
+}
+
 body {
     margin: 0;
     padding: 0;
     background: #e0e0e0;
 }
 
-.container {
+.boardContainer {
     position: absolute;
-    left: calc(50% - 300px);
+    left: calc(100% - 700px);
     top: calc(50% - 335px);
     width: 600px;
     height: 670px;
@@ -29,6 +34,8 @@ body {
     width: 0px;
     height: 280px;
     border: 1px solid #646464;
+    border-top: 0px;
+    border-bottom: 0px;
 }
 
 .horizontal {
@@ -36,6 +43,8 @@ body {
     width: 560px;
     height: 0px;
     border: 1px solid #646464;
+    border-left: 0px;
+    border-right: 0px;
 }
 
 .slope1 {
@@ -71,6 +80,7 @@ body {
 .riverContainer p {
     margin: 0;
     padding: 0;
+    font-family: "LXGW";
     font-size: 30px;
     font-weight: bold;
 }
