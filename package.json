@@ -2,7 +2,7 @@
     "name": "xiangqi",
     "version": "1.0.0",
     "description": "A python environment and nodejs UI of the game Xiangqi.",
-    "main": "index.js",
+    "main": "app.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "electron ."
