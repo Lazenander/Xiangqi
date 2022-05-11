@@ -36,6 +36,69 @@ body::-webkit-scrollbar {
     border-radius: 10px;
 }
 
+.textDataContainer {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    width: 240px;
+    height: 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+}
+
+.textDataContainer p {
+    margin: 0px;
+    padding: 0px;
+    font-size: 25px;
+    line-height: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.graphDataContainer {
+    position: absolute;
+    left: 49px;
+    top: 84px;
+    width: 220px;
+    height: 135px;
+    background: #f5f5f5;
+    border: 1px solid #646464;
+}
+
+.midLine {
+    position: absolute;
+    left: 0;
+    top: calc(50% - 0.5px);
+    width: 100%;
+    height: 0px;
+    border: 0.5px solid #b9b9b9;
+    border-left: none;
+    border-right: none;
+}
+
+.percentageContainer {
+    position: absolute;
+    left: 20px;
+    top: 85px;
+    width: 25px;
+    height: 135px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.percentageContainer p {
+    margin: 0;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
 .boardContainer {
     position: absolute;
     left: 500px;
@@ -110,6 +173,8 @@ body::-webkit-scrollbar {
     font-family: "LXGW";
     font-size: 30px;
     font-weight: bold;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .dot {
