@@ -25,6 +25,99 @@ body::-webkit-scrollbar {
     border-radius: 10px;
 }
 
+.operationBlock {
+    position: absolute;
+    top: calc(50% - 145px);
+    left: calc(50% - 120px);
+    width: 240px;
+    height: 290px;
+}
+
+.blockTitle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 25px;
+}
+
+.blockTitle p {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-size: 25px;
+    line-height: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    -webkit-user-select: none;
+    user-select: none;
+    text-align: center;
+}
+
+.inputContainer {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inputContainer p {
+    margin: 0;
+    padding: 0;
+    width: 95px;
+    font-size: 20px;
+    line-height: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+    text-align: right;
+}
+
+.inputContainer input {
+    margin: 0;
+    padding: 0px 5px;
+    width: 145px;
+    height: 30px;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.usernameContainer {
+    top: 75px;
+}
+
+.passwordContainer {
+    top: 140px;
+}
+
+.submitButtonContainer {
+    position: absolute;
+    left: 0;
+    bottom: 0px;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.submitButtonContainer button {
+    margin: 0;
+    padding: 0;
+    width: 60px;
+    height: 30px;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 5px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
 .dataContainer {
     position: absolute;
     left: 100px;
