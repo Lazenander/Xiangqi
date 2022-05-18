@@ -9,7 +9,7 @@
 
 <body>
     <div class="operationContainer">
-        <div class="operationBlock">
+        <div id="loginWindow" class="operationBlock">
             <div class="blockTitle">
                 <p>登陆/注册</p>
             </div>
@@ -25,6 +25,12 @@
                 <button id="loginButton" onclick="login()">登陆</button>
                 <button id="registerButton" onclick="register()">注册</button>
             </div>
+        </div>
+        <div id="mainWindow" class="operationBlock" style="display:none">
+            <div class="usernameShower">
+                <p id="userShower" class=""></p>
+            </div>
+            <p>排名：</p>
         </div>
     </div>
     <div class="dataContainer">

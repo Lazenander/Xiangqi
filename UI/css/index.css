@@ -94,6 +94,10 @@ body::-webkit-scrollbar {
     top: 140px;
 }
 
+.usernameShower {
+    position: absolute;
+}
+
 .submitButtonContainer {
     position: absolute;
     left: 0;
