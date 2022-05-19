@@ -13,17 +13,20 @@ class Board():
     
     def FEN(self):
         retstr = ""
-        for i in range(9):
+        for i in range(10):
             if i != 0:
                 retstr += '/'
             cnt = 0
-            for j in range(10):
+            for j in range(9):
                 if self.board[i][j] == ' ':
                     cnt += 1
                 else:
                     if cnt != 0:
                         retstr += str(cnt)
+                        cnt = 0
                     retstr += self.board[i][j]
+            if cnt != 0:
+                retstr += str(cnt)
         return retstr
 
     def getPiecebyCoor(self, coor):
@@ -33,11 +36,11 @@ class Board():
             return False
         return self.board[y][x]
     
-    def move(self, coor1, coor2):
-        x1 = ord(coor1[0]) - ord('a')
-        y1 = ord(coor1[1]) - ord('0')
-        x2 = ord(coor2[0]) - ord('a')
-        y2 = ord(coor2[1]) - ord('0')
+    def move(self, coor):
+        x1 = ord(coor[0]) - ord('a')
+        y1 = ord(coor[1]) - ord('0')
+        x2 = ord(coor[2]) - ord('a')
+        y2 = ord(coor[3]) - ord('0')
         tmpPiece = self.board[y2][x2]
         self.board[y2][x2] = self.board[y1][x1]
         self.board[y1][x1] = ' '
