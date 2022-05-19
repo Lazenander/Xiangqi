@@ -131,3 +131,7 @@ UI/scripts/server.js
 
 #trash
 trash
+
+#pycache
+python/__pycache__
+python/modules/__pycache__
