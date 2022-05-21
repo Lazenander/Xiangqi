@@ -129,9 +129,8 @@ dist
 # server api
 UI/scripts/server.js
 
-#trash
-trash
-
 #pycache
 python/__pycache__
 python/modules/__pycache__
+python_cloud/__pycache__
+python_cloud/modules/__pycache__

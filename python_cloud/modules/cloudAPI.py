@@ -2,9 +2,12 @@ import requests
 
 def queryall(fen):
     url = "http://www.chessdb.cn/chessdb.php?action=queryall&board=" + fen
-    retstr = requests.post(url).text.split('\x00')[0]
+    retstr = requests.post(url).text
+    if retstr == "invalid board" or retstr == "unknown" or retstr == "checkmate" or retstr == "stalemate":
+        return retstr
+    retstr = retstr.split('\x00')[0]
     movestrs = retstr.split('|')
-    moves = []
+    moves = {}
     for movestr in movestrs:
         newmove = {
             "move": "",
@@ -19,7 +22,7 @@ def queryall(fen):
         newmove["rank"] = int(tmpstr[2].split(':')[1])
         newmove["note"] = tmpstr[3].split(':')[1]
         newmove["winrate"] = float(tmpstr[4].split(':')[1])
-        moves.append(newmove)
+        moves[newmove["move"]] = newmove
     return moves
 
 def queryrule(fen, pastmoves):
@@ -33,7 +36,7 @@ def queryrule(fen, pastmoves):
     if retstr == "invalid board" or retstr == "invalid movelist" or retstr == "checkmate" or retstr == "stalemate":
         return retstr
     movestrs = retstr.split('|')
-    moves = []
+    moves = {}
     for movestr in movestrs:
         newmove = {
             "move": "",
@@ -42,5 +45,5 @@ def queryrule(fen, pastmoves):
         tmpstr = movestr.split(',')
         newmove["move"] = tmpstr[0].split(':')[1]
         newmove["rule"] = tmpstr[1].split(':')[1]
-        moves.append(newmove)
+        moves[newmove["move"]] = newmove
     return moves
