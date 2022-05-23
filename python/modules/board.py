@@ -16,6 +16,37 @@ def remove(array, element):
         array.pop(i);
     return array
 
+def toChar(index):
+    if index == 0:
+        return 'k'
+    if index == 1 or index == 2:
+        return 'a'
+    if index == 3 or index == 4:
+        return 'b'
+    if index == 5 or index == 6:
+        return 'n'
+    if index == 7 or index == 8:
+        return 'r'
+    if index == 9 or index == 10:
+        return 'c'
+    if index >= 11 and index <= 15:
+        return 'p'
+    if index == 16:
+        return 'K'
+    if index == 17 or index == 18:
+        return 'A'
+    if index == 19 or index == 20:
+        return 'B'
+    if index == 21 or index == 22:
+        return 'N'
+    if index == 23 or index == 24:
+        return 'R'
+    if index == 25 or index == 26:
+        return 'C'
+    if index >= 27 and index <= 31:
+        return 'P'
+    return -1
+
 class Board:
     def __init__(self):
         self.rounds = 0;
@@ -322,6 +353,31 @@ class Board:
                     return False;
             return True
         return False
+    
+    def FEN(self):
+        board = self.board
+        fen = ""
+        for i in range(10):
+            if i != 0:
+                fen += '/'
+            cnt = 0
+            for j in range(9):
+                c = toChar(board[j][i])
+                if c == -1:
+                    cnt += 1
+                else:
+                    if cnt != 0:
+                        fen += str(cnt)
+                        cnt = 0
+                    fen += c
+            if cnt != 0:
+                fen += str(cnt)
+                cnt = 0
+        if self.turn == "red":
+            fen += " w"
+        else:
+            fen += " b"
+        return fen
     
     def __str__(self):
         self.renderPieces();
