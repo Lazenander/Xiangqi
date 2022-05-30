@@ -96,6 +96,28 @@ body::-webkit-scrollbar {
 
 .usernameShower {
     position: absolute;
+    top: 0px;
+    height: 30px;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.usernameShower p {
+    margin: 0;
+    padding: 0;
+}
+
+.rankingShower {
+    position: absolute;
+    top: 50px;
+    height: 30px;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.rankingShower p {
+    margin: 0;
+    padding: 0;
 }
 
 .submitButtonContainer {

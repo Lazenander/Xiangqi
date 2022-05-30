@@ -1,12 +1,15 @@
 const loginWindow = document.getElementById('loginWindow');
 const mainWindow = document.getElementById('mainWindow');
 const userShower = document.getElementById('userShower');
+const rankShower = document.getElementById('rankShower')
 
 const xhr = new XMLHttpRequest();
 global.user = "";
+global.score = 0;
 global.finishLogin = () => {
     console.log(user);
-    userShower.innerText = cutString(user, 6) + "，";
+    userShower.innerText = cutString(user, 5) + "，登陆成功！";
+    rankShower.innerText = "得分：" + score;
     loginWindow.style.display = "none";
     mainWindow.style.display = "block";
 };
