@@ -3,6 +3,10 @@ import pickle
 from math import log, sqrt
 import numpy as np
 import tqdm
+
+import sys
+sys.path.append(os.getcwd() + "/../../python")
+
 from env import XiangqiEnv
 from modules.vec2d import Vec2d
 import copy

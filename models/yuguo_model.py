@@ -1,5 +1,5 @@
-from Manto_Carlo_Searching_Tree import load_model,searching_tree,totuple
-from env import XiangqiEnv
+from modules.Manto_Carlo_Searching_Tree import load_model,searching_tree,totuple
+from ..python.env import XiangqiEnv
 
 class Model(searching_tree):
     def __init__(self,initial_state,turn):
