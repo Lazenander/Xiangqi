@@ -1,4 +1,5 @@
 import random
+import sys
 
 class Model:
     def action(state, actionSpace):

@@ -1,3 +1,8 @@
+const fs = require('fs');
+const { exec } = require('child_process');
+const { PythonShell } = require('python-shell');
+const process = require('process');
+
 const loginWindow = document.getElementById('loginWindow');
 const mainWindow = document.getElementById('mainWindow');
 const userShower = document.getElementById('userShower');
@@ -6,10 +11,10 @@ const rankShower = document.getElementById('rankShower')
 const xhr = new XMLHttpRequest();
 global.user = "";
 global.score = 0;
+global.opponent = "";
 global.finishLogin = () => {
-    console.log(user);
     userShower.innerText = cutString(user, 5) + "，登陆成功！";
-    rankShower.innerText = "得分：" + score;
+    rankShower.innerText = "目前得分：" + score;
     loginWindow.style.display = "none";
     mainWindow.style.display = "block";
 };
@@ -29,4 +34,31 @@ function getWinRate() {
             console.log(xhr.responseText)
         }
     }
+}
+
+let pymodel;
+
+function getModels() {
+    let models = fs.readdirSync('./models');
+    let modelfile = models[Math.floor(Math.random() * models.length)];
+    while (modelfile == "__pycache__")
+        modelfile = models[Math.floor(Math.random() * models.length)];
+    opponent = modelfile.split('.')[0];
+    pymodel = new PythonShell("game.py", {
+        mode: "text",
+        args: [process.cwd()],
+        pythonPath: "python3",
+        pythonOptions: ["-u"],
+        scriptPath: process.cwd() + "/UI/scripts",
+    });
+    pymodel.send("example");
+    pymodel.on('message', function(message) {
+        console.log(message)
+    })
+}
+
+function step(state, actionSpace) {}
+
+function startGame() {
+    getModels();
 }
