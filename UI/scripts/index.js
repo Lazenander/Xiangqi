@@ -5,13 +5,18 @@ const process = require('process');
 
 const loginWindow = document.getElementById('loginWindow');
 const mainWindow = document.getElementById('mainWindow');
+const gamingWindow = document.getElementById('gamingWindow');
+
 const userShower = document.getElementById('userShower');
 const rankShower = document.getElementById('rankShower');
 
 const winrateShower = document.getElementById('winrateShower');
 const winrateCanvas = document.getElementById('winrateCanvas');
 
+const opponentName = document.getElementById('opponentName');
+
 const xhr = new XMLHttpRequest();
+
 global.user = "";
 global.score = 0;
 global.opponent = "";
@@ -20,9 +25,10 @@ global.finishLogin = () => {
     rankShower.innerText = "目前得分：" + score;
     loginWindow.style.display = "none";
     mainWindow.style.display = "block";
+    gamingWindow.style.display = "none";
 };
 
-let winrateLst = []
+let winrateLst = [];
 
 function cutString(str, num) {
     if (str.length <= num + 1)
@@ -77,7 +83,8 @@ function getModels() {
     while (modelfile == "__pycache__")
         modelfile = models[Math.floor(Math.random() * models.length)];
     //opponent = modelfile.split('.')[0];
-    opponent = "example"
+    opponent = "example";
+    opponentName.innerText = opponent;
     pymodel = new PythonShell("game.py", {
         mode: "text",
         args: [process.cwd(), opponent],
@@ -92,6 +99,9 @@ function getModels() {
                 userwin();
             else if (jsonMessage.signal == "win" && jsonMessage.player == "ai" || jsonMessage.signal == "lose" && jsonMessage.player == "user")
                 userlose();
+            else if (jsonMessage.signal == "board") {
+                renderBoard();
+            }
         }
         console.log(jsonMessage);
         getWinRate();
@@ -100,10 +110,23 @@ function getModels() {
 
 function userwin() {
     console.log("userwin")
+    clearGame();
 }
 
 function userlose() {
     console.log("userlose")
+    clearGame();
+}
+
+function userSurrender() {
+    userlose();
+}
+
+function clearGame() {
+    winrateLst = [];
+    winrateCanvas.innerHTML = "";
+    mainWindow.style.display = "block";
+    gamingWindow.style.display = "none";
 }
 
 function step(index, actionx, actiony) {
@@ -111,5 +134,7 @@ function step(index, actionx, actiony) {
 }
 
 function startGame() {
+    mainWindow.style.display = "none";
+    gamingWindow.style.display = "block";
     getModels();
 }

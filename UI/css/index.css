@@ -120,7 +120,7 @@ body::-webkit-scrollbar {
     padding: 0;
 }
 
-.startGameButtonShower {
+.centerButtonShower {
     position: absolute;
     bottom: 30px;
     height: 40px;
@@ -131,7 +131,7 @@ body::-webkit-scrollbar {
     align-items: center;
 }
 
-.startGameButtonShower button {
+.centerButtonShower button {
     margin: 0;
     padding: 0;
     width: 100px;
@@ -335,4 +335,22 @@ body::-webkit-scrollbar {
     top: 0;
     width: 100%;
     height: 100%;
+}
+
+.opponentShower {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+}
+
+.opponentShower p {
+    margin: 0px;
+    padding: 0px;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
 }
