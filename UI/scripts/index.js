@@ -6,7 +6,10 @@ const process = require('process');
 const loginWindow = document.getElementById('loginWindow');
 const mainWindow = document.getElementById('mainWindow');
 const userShower = document.getElementById('userShower');
-const rankShower = document.getElementById('rankShower')
+const rankShower = document.getElementById('rankShower');
+
+const winrateShower = document.getElementById('winrateShower');
+const winrateCanvas = document.getElementById('winrateCanvas');
 
 const xhr = new XMLHttpRequest();
 global.user = "";
@@ -18,6 +21,8 @@ global.finishLogin = () => {
     loginWindow.style.display = "none";
     mainWindow.style.display = "block";
 };
+
+let winrateLst = []
 
 function cutString(str, num) {
     if (str.length <= num + 1)
@@ -31,7 +36,14 @@ function getWinRate() {
     xhr.send();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log(xhr.responseText)
+            let winrate = Number(xhr.responseText.split("|")[0].split(",")[4].split(":")[1]);
+            if (winrate == NaN || winrate == undefined || winrate < 0 || winrate > 100) {
+                winrate = 50.0;
+                winrateShower.innerText = "未知";
+            } else
+                winrateShower.innerText = winrate + "%";
+            winrateLst.push(winrate);
+            formWinrateCurve();
         }
     }
 }
@@ -43,21 +55,39 @@ function getModels() {
     let modelfile = models[Math.floor(Math.random() * models.length)];
     while (modelfile == "__pycache__")
         modelfile = models[Math.floor(Math.random() * models.length)];
-    opponent = modelfile.split('.')[0];
+    //opponent = modelfile.split('.')[0];
+    opponent = "example"
     pymodel = new PythonShell("game.py", {
         mode: "text",
-        args: [process.cwd()],
+        args: [process.cwd(), opponent],
         pythonPath: "python3",
         pythonOptions: ["-u"],
         scriptPath: process.cwd() + "/UI/scripts",
     });
-    pymodel.send("example");
     pymodel.on('message', function(message) {
-        console.log(message)
+        jsonMessage = JSON.parse(message)
+        if (jsonMessage.type == "signal") {
+            if (jsonMessage.signal == "win" && jsonMessage.player == "user" || jsonMessage.signal == "lose" && jsonMessage.player == "ai")
+                userwin();
+            else if (jsonMessage.signal == "win" && jsonMessage.player == "ai" || jsonMessage.signal == "lose" && jsonMessage.player == "user")
+                userlose();
+        }
+        console.log(jsonMessage);
+        getWinRate();
     })
 }
 
-function step(state, actionSpace) {}
+function userwin() {
+    console.log("userwin")
+}
+
+function userlose() {
+    console.log("userlose")
+}
+
+function step(index, actionx, actiony) {
+    pymodel.send(index, actionx, actiony);
+}
 
 function startGame() {
     getModels();

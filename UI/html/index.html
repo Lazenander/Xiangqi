@@ -37,15 +37,17 @@
                 <button id="startGameButton" onclick="startGame()">开始游戏</button>
             </div>
         </div>
+        <div id="operationBlock" class="operationBlock" style="display:none">
+        </div>
     </div>
     <div class="dataContainer">
         <div class="textDataContainer">
-            <p>红方胜率：</p>
-            <p>未开始</p>
+            <p>玩家胜率：</p>
+            <p id="winrateShower">未开始</p>
         </div>
         <div class="graphDataContainer">
             <div class="midLine"></div>
-            <svg xmlns="http://www.w3.org/2000/svg"></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" id="winrateCanvas"></svg>
         </div>
         <div class="percentageContainer">
             <p>100%</p>
