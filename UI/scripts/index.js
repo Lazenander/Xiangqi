@@ -30,6 +30,27 @@ function cutString(str, num) {
     return str.substr(0, num) + "...";
 }
 
+function rateLst2Point(rateLst) {
+    let pointsStr = ""
+    for (let i = 0; i < rateLst.length; i++) {
+        if (i != 0)
+            pointsStr += " "
+        pointsStr += i / (rateLst.length - 1) * 220 + "," + (135 - rateLst[i] / 100 * 135);
+    }
+    return pointsStr;
+}
+
+function formWinrateCurve() {
+    winrateCanvas.innerHTML = "";
+    let polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+    if (winrateLst.length == 1)
+        polyline.setAttribute("points", rateLst2Point([winrateLst[0], winrateLst[0]]));
+    else
+        polyline.setAttribute("points", rateLst2Point(winrateLst));
+    polyline.style = "fill:transparent;stroke:black;stroke-width:1"
+    winrateCanvas.appendChild(polyline);
+}
+
 function getWinRate() {
     let val = "http://www.chessdb.cn/chessdb.php?action=" + "queryall" + "&board=rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w"
     xhr.open("POST", val, true);
