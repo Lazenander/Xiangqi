@@ -7,13 +7,15 @@ const loginWindow = document.getElementById('loginWindow');
 const mainWindow = document.getElementById('mainWindow');
 const gamingWindow = document.getElementById('gamingWindow');
 
-const userShower = document.getElementById('userShower');
-const rankShower = document.getElementById('rankShower');
+const userDisplayer = document.getElementById('userDisplayer');
+const rankDisplayer = document.getElementById('rankDisplayer');
 
-const winrateShower = document.getElementById('winrateShower');
+const winrateDisplayer = document.getElementById('winrateDisplayer');
 const winrateCanvas = document.getElementById('winrateCanvas');
 
 const opponentName = document.getElementById('opponentName');
+
+const boardDisplayer = document.getElementById('boardDisplayer');
 
 const xhr = new XMLHttpRequest();
 
@@ -21,14 +23,15 @@ global.user = "";
 global.score = 0;
 global.opponent = "";
 global.finishLogin = () => {
-    userShower.innerText = cutString(user, 5) + "，登陆成功！";
-    rankShower.innerText = "目前得分：" + score;
+    userDisplayer.innerText = cutString(user, 5) + "，登陆成功！";
+    rankDisplayer.innerText = "目前得分：" + score;
     loginWindow.style.display = "none";
     mainWindow.style.display = "block";
     gamingWindow.style.display = "none";
 };
 
 let winrateLst = [];
+let userSide = "";
 
 function cutString(str, num) {
     if (str.length <= num + 1)
@@ -53,7 +56,7 @@ function formWinrateCurve() {
         polyline.setAttribute("points", rateLst2Point([winrateLst[0], winrateLst[0]]));
     else
         polyline.setAttribute("points", rateLst2Point(winrateLst));
-    polyline.style = "fill:transparent;stroke:black;stroke-width:1"
+    polyline.style = "fill:transparent;stroke:red;stroke-width:1"
     winrateCanvas.appendChild(polyline);
 }
 
@@ -66,9 +69,9 @@ function getWinRate() {
             let winrate = Number(xhr.responseText.split("|")[0].split(",")[4].split(":")[1]);
             if (winrate == NaN || winrate == undefined || winrate < 0 || winrate > 100) {
                 winrate = 50.0;
-                winrateShower.innerText = "未知";
+                winrateDisplayer.innerText = "未知";
             } else
-                winrateShower.innerText = winrate + "%";
+                winrateDisplayer.innerText = winrate + "%";
             winrateLst.push(winrate);
             formWinrateCurve();
         }
@@ -85,9 +88,11 @@ function getModels() {
     //opponent = modelfile.split('.')[0];
     opponent = "example";
     opponentName.innerText = opponent;
+    userSide = Math.random() > 0.5 ? "black" : "red";
+    console.log(userSide);
     pymodel = new PythonShell("game.py", {
         mode: "text",
-        args: [process.cwd(), opponent],
+        args: [process.cwd(), opponent, userSide],
         pythonPath: "python3",
         pythonOptions: ["-u"],
         scriptPath: process.cwd() + "/UI/scripts",
@@ -99,9 +104,8 @@ function getModels() {
                 userwin();
             else if (jsonMessage.signal == "win" && jsonMessage.player == "ai" || jsonMessage.signal == "lose" && jsonMessage.player == "user")
                 userlose();
-            else if (jsonMessage.signal == "board") {
-                renderBoard();
-            }
+        } else if (jsonMessage.type == "board") {
+            renderBoard(jsonMessage.state);
         }
         console.log(jsonMessage);
         getWinRate();
@@ -116,10 +120,6 @@ function userwin() {
 function userlose() {
     console.log("userlose")
     clearGame();
-}
-
-function userSurrender() {
-    userlose();
 }
 
 function clearGame() {
@@ -137,4 +137,130 @@ function startGame() {
     mainWindow.style.display = "none";
     gamingWindow.style.display = "block";
     getModels();
+}
+
+function formChess(index) {
+    let piece = document.createElement("div");
+    piece.classList.add("piece");
+    piece.id = "piece" + index;
+    let p = document.createElement("p");
+    if (index < 16)
+        p.style.color = "red";
+    else
+        p.style.color = "black";
+    switch (index) {
+        case 0:
+            p.innerText = "帥";
+            break;
+        case 1:
+            p.innerText = "仕";
+            break;
+        case 2:
+            p.innerText = "仕";
+            break;
+        case 3:
+            p.innerText = "相";
+            break;
+        case 4:
+            p.innerText = "相";
+            break;
+        case 5:
+            p.innerText = "馬";
+            break;
+        case 6:
+            p.innerText = "馬";
+            break;
+        case 7:
+            p.innerText = "車";
+            break;
+        case 8:
+            p.innerText = "車";
+            break;
+        case 9:
+            p.innerText = "炮";
+            break;
+        case 10:
+            p.innerText = "炮";
+            break;
+        case 11:
+            p.innerText = "兵";
+            break;
+        case 12:
+            p.innerText = "兵";
+            break;
+        case 13:
+            p.innerText = "兵";
+            break;
+        case 14:
+            p.innerText = "兵";
+            break;
+        case 15:
+            p.innerText = "兵";
+            break;
+        case 16:
+            p.innerText = "將";
+            break;
+        case 17:
+            p.innerText = "士";
+            break;
+        case 18:
+            p.innerText = "士";
+            break;
+        case 19:
+            p.innerText = "象";
+            break;
+        case 20:
+            p.innerText = "象";
+            break;
+        case 21:
+            p.innerText = "馬";
+            break;
+        case 22:
+            p.innerText = "馬";
+            break;
+        case 23:
+            p.innerText = "車";
+            break;
+        case 24:
+            p.innerText = "車";
+            break;
+        case 25:
+            p.innerText = "炮";
+            break;
+        case 26:
+            p.innerText = "炮";
+            break;
+        case 27:
+            p.innerText = "卒";
+            break;
+        case 28:
+            p.innerText = "卒";
+            break;
+        case 29:
+            p.innerText = "卒";
+            break;
+        case 30:
+            p.innerText = "卒";
+            break;
+        case 31:
+            p.innerText = "卒";
+            break;
+    }
+}
+
+function renderBoard(board) {
+    console.log(board);
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (board[i][j] == -1)
+                continue;
+            let piece = formChess(board[i][j]);
+            piece.style.left = i * 70 - 31 + "px";
+            if (userSide == "black")
+                piece.style.top = j * 70 - 31 + "px";
+            else
+                piece.style.top = 630 - j * 70 + 31 - 70 + "px";
+            boardDisplayer.appendChild(piece);
+        }
+    }
 }

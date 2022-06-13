@@ -21,6 +21,10 @@ AIModel = import_module(sys.argv[2]).Model
 e = XiangqiEnv()
 model = AIModel()
 
+if sys.argv[3] == "black":
+    aiAction = model.action(e.state(), e.actionSpace())
+    _, _, signal = e.step(aiAction)
+
 while True:
     print(json.dumps({"type": "board", "state": e.state(), "actionSpace": Vec2ds2List(e.actionSpace())}))
     
@@ -32,6 +36,6 @@ while True:
         print(json.dumps({"type": "signal", "player": "user", "value": signal}))
     
     aiAction = model.action(e.state(), e.actionSpace())
-    _, _, signal = e.step(userAction)
+    _, _, signal = e.step(aiAction)
     if signal:
         print(json.dumps({"type": "signal", "player": "ai", "value": signal}))

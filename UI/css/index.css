@@ -94,7 +94,7 @@ body::-webkit-scrollbar {
     top: 140px;
 }
 
-.usernameShower {
+.usernameDisplayer {
     position: absolute;
     top: 0px;
     height: 30px;
@@ -102,12 +102,12 @@ body::-webkit-scrollbar {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.usernameShower p {
+.usernameDisplayer p {
     margin: 0;
     padding: 0;
 }
 
-.rankingShower {
+.rankingDisplayer {
     position: absolute;
     top: 50px;
     height: 30px;
@@ -115,12 +115,12 @@ body::-webkit-scrollbar {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.rankingShower p {
+.rankingDisplayer p {
     margin: 0;
     padding: 0;
 }
 
-.centerButtonShower {
+.centerButtonDisplayer {
     position: absolute;
     bottom: 30px;
     height: 40px;
@@ -131,7 +131,7 @@ body::-webkit-scrollbar {
     align-items: center;
 }
 
-.centerButtonShower button {
+.centerButtonDisplayer button {
     margin: 0;
     padding: 0;
     width: 100px;
@@ -254,8 +254,8 @@ body::-webkit-scrollbar {
 
 .outerBorder {
     position: absolute;
-    left: calc(50% - 280px);
-    top: calc(50% - 315px);
+    left: calc(50% - 282px);
+    top: calc(50% - 317px);
     width: 560px;
     height: 630px;
     border: 2px solid #646464;
@@ -337,7 +337,7 @@ body::-webkit-scrollbar {
     height: 100%;
 }
 
-.opponentShower {
+.opponentDisplayer {
     position: absolute;
     left: 0px;
     top: 0px;
@@ -348,9 +348,44 @@ body::-webkit-scrollbar {
     align-items: left;
 }
 
-.opponentShower p {
+.opponentDisplayer p {
     margin: 0px;
     padding: 0px;
     font-size: 20px;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.piece {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    box-shadow: 0px 0px 10px #8f8f8f, -0px -0px 10px #ffffff;
+    border-radius: 30px;
+    background: #e0e0e0;
+    display: flex;
+    flex-direction: space-around;
+    align-items: center;
+}
+
+.piece p {
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+.boardDisplayer {
+    position: absolute;
+    left: calc(50% - 280px);
+    top: calc(50% - 315px);
+    width: 560px;
+    height: 630px;
+    font-family: "LXGW";
+    font-size: 30px;
+    font-weight: bold;
+    -webkit-user-select: none;
+    user-select: none;
 }

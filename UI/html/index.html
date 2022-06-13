@@ -27,18 +27,18 @@
             </div>
         </div>
         <div id="mainWindow" class="operationBlock" style="display:none">
-            <div class="usernameShower">
-                <p id="userShower" class=""></p>
+            <div class="usernameDisplayer">
+                <p id="userDisplayer" class=""></p>
             </div>
-            <div class="rankingShower">
-                <p id="rankShower">排名：</p>
+            <div class="rankingDisplayer">
+                <p id="rankDisplayer">排名：</p>
             </div>
-            <div class="centerButtonShower">
+            <div class="centerButtonDisplayer">
                 <button id="startGameButton" onclick="startGame()">开始游戏</button>
             </div>
         </div>
         <div id="gamingWindow" class="operationBlock" style="display:none">
-            <div class="opponentShower">
+            <div class="opponentDisplayer">
                 <p>对手：</p>
                 <p id="opponentName"></p>
             </div>
@@ -47,7 +47,7 @@
     <div class="dataContainer">
         <div class="textDataContainer">
             <p>玩家胜率：</p>
-            <p id="winrateShower">未开始</p>
+            <p id="winrateDisplayer">未开始</p>
         </div>
         <div class="graphDataContainer">
             <div class="midLine"></div>
@@ -105,6 +105,9 @@
             <div class="dot" style="right: 135px; top: 205px"></div>
             <div class="dot" style="left: 65px; top: 135px"></div>
             <div class="dot" style="right: 65px; top: 135px"></div>
+        </div>
+        <div id="boardDisplayer" class="boardDisplayer">
+
         </div>
     </div>
     <script src="../scripts/index.js"></script>
