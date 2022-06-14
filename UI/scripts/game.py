@@ -23,7 +23,7 @@ model = AIModel()
 
 if sys.argv[3] == "black":
     aiAction = model.action(e.state(), e.actionSpace())
-    _, _, signal = e.step(aiAction)
+    _, _, _ = e.step(aiAction)
 
 while True:
     print(json.dumps({"type": "board", "state": e.state(), "actionSpace": Vec2ds2List(e.actionSpace())}))
@@ -34,6 +34,8 @@ while True:
     _, _, signal = e.step(userAction)
     if signal:
         print(json.dumps({"type": "signal", "player": "user", "value": signal}))
+    
+    print(json.dumps({"type": "board", "state": e.state(), "actionSpace": Vec2ds2List(e.actionSpace())}))
     
     aiAction = model.action(e.state(), e.actionSpace())
     _, _, signal = e.step(aiAction)

@@ -373,7 +373,10 @@ body::-webkit-scrollbar {
     padding: 0px;
     width: 100%;
     font-size: 20px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "LXGW";
+    font-weight: bold;
+    -webkit-user-select: none;
+    user-select: none;
     text-align: center;
 }
 
@@ -383,9 +386,16 @@ body::-webkit-scrollbar {
     top: calc(50% - 315px);
     width: 560px;
     height: 630px;
-    font-family: "LXGW";
-    font-size: 30px;
-    font-weight: bold;
-    -webkit-user-select: none;
-    user-select: none;
+}
+
+.selectedPiece {
+    background: #c7c7c7;
+}
+
+.actionSpaceDot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: green;
 }

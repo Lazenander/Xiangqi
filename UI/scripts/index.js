@@ -16,6 +16,7 @@ const winrateCanvas = document.getElementById('winrateCanvas');
 const opponentName = document.getElementById('opponentName');
 
 const boardDisplayer = document.getElementById('boardDisplayer');
+const actionSpaceDisplayer = document.getElementById('actionSpaceDisplayer');
 
 const xhr = new XMLHttpRequest();
 
@@ -32,6 +33,9 @@ global.finishLogin = () => {
 
 let winrateLst = [];
 let userSide = "";
+
+let selectedPiece = -1;
+let actionSpaces = [];
 
 function cutString(str, num) {
     if (str.length <= num + 1)
@@ -83,7 +87,7 @@ let pymodel;
 function getModels() {
     let models = fs.readdirSync('./models');
     let modelfile = models[Math.floor(Math.random() * models.length)];
-    while (modelfile == "__pycache__")
+    while (modelfile == "__pycache__" || modelfile == "modules")
         modelfile = models[Math.floor(Math.random() * models.length)];
     //opponent = modelfile.split('.')[0];
     opponent = "example";
@@ -106,8 +110,8 @@ function getModels() {
                 userlose();
         } else if (jsonMessage.type == "board") {
             renderBoard(jsonMessage.state);
+            actionSpaces = jsonMessage.actionSpace;
         }
-        console.log(jsonMessage);
         getWinRate();
     })
 }
@@ -139,10 +143,16 @@ function startGame() {
     getModels();
 }
 
-function formChess(index) {
+function formChess(index, x, y) {
     let piece = document.createElement("div");
     piece.classList.add("piece");
     piece.id = "piece" + index;
+    piece.style.zIndex = 100;
+    piece.style.left = x * 70 - 31 + "px";
+    if (userSide == "black")
+        piece.style.top = y * 70 - 31 + "px";
+    else
+        piece.style.top = 630 - y * 70 + 39 - 70 + "px";
     let p = document.createElement("p");
     if (index < 16)
         p.style.color = "red";
@@ -246,21 +256,60 @@ function formChess(index) {
             p.innerText = "卒";
             break;
     }
+    piece.appendChild(p);
+    piece.onclick = function() {
+        console.log(index)
+        if (userSide == "red" && index >= 16)
+            return;
+        if (userSide == "black" && index < 16)
+            return;
+        if (selectedPiece != -1)
+            document.getElementById("piece" + selectedPiece).classList.remove("selectedPiece");
+        selectedPiece = index;
+        console.log(actionSpaces, index)
+        piece.classList.add("selectedPiece");
+        actionSpaceDisplayer.innerText = "";
+        if (index < 16) {
+            console.log(actionSpaces[index])
+            renderActionSpace(index, x, y, actionSpaces[index]);
+        } else {
+            console.log(actionSpaces[index - 16])
+            renderActionSpace(index, x, y, actionSpaces[index - 16]);
+        }
+    }
+    return piece;
+}
+
+function renderActionSpace(index, x, y, actionSpace) {
+    console.log(actionSpace)
+    for (let i = 0; i < actionSpace.length; i++) {
+        let actionSpaceDiv = document.createElement("div");
+        let newX, newY;
+        if (userSide == "red") {
+            newX = x + actionSpace[i][0];
+            newY = y + actionSpace[i][1];
+        } else {
+            newX = x - actionSpace[i][0];
+            newY = y - actionSpace[i][1];
+        }
+        actionSpaceDiv.style.zIndex = 101;
+        actionSpaceDiv.style.left = newX * 70 - 5 + "px";
+        if (userSide == "black")
+            actionSpaceDiv.style.top = newY * 70 - 5 + "px";
+        else
+            actionSpaceDiv.style.top = 630 - newY * 70 - 5 + "px";
+        actionSpaceDiv.classList.add("actionSpaceDot");
+        actionSpaceDiv.id = "actionSpace|" + newX + "|" + newY;
+        actionSpaceDisplayer.append(actionSpaceDiv);
+    }
 }
 
 function renderBoard(board) {
-    console.log(board);
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
             if (board[i][j] == -1)
                 continue;
-            let piece = formChess(board[i][j]);
-            piece.style.left = i * 70 - 31 + "px";
-            if (userSide == "black")
-                piece.style.top = j * 70 - 31 + "px";
-            else
-                piece.style.top = 630 - j * 70 + 31 - 70 + "px";
-            boardDisplayer.appendChild(piece);
+            boardDisplayer.appendChild(formChess(Number(board[i][j]), i, j));
         }
     }
 }
