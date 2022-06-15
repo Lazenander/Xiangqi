@@ -134,7 +134,7 @@ function clearGame() {
 }
 
 function step(index, actionx, actiony) {
-    pymodel.send(index, actionx, actiony);
+    pymodel.send("" + index + " " + actionx + " " + actiony);
 }
 
 function startGame() {
@@ -265,6 +265,11 @@ function formChess(index, x, y) {
             return;
         if (selectedPiece != -1)
             document.getElementById("piece" + selectedPiece).classList.remove("selectedPiece");
+        if (selectedPiece == index) {
+            actionSpaceDisplayer.innerText = "";
+            selectedPiece = -1;
+            return;
+        }
         selectedPiece = index;
         console.log(actionSpaces, index)
         piece.classList.add("selectedPiece");
@@ -300,11 +305,18 @@ function renderActionSpace(index, x, y, actionSpace) {
             actionSpaceDiv.style.top = 630 - newY * 70 - 5 + "px";
         actionSpaceDiv.classList.add("actionSpaceDot");
         actionSpaceDiv.id = "actionSpace|" + newX + "|" + newY;
+        actionSpaceDiv.onclick = () => {
+            console.log(index, actionSpace[i][0], actionSpace[i][1])
+            step(index, actionSpace[i][0], actionSpace[i][1]);
+            selectedPiece = -1;
+        }
         actionSpaceDisplayer.append(actionSpaceDiv);
     }
 }
 
 function renderBoard(board) {
+    boardDisplayer.innerHTML = "";
+    actionSpaceDisplayer.innerHTML = "";
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
             if (board[i][j] == -1)
