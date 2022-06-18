@@ -307,7 +307,10 @@ function renderActionSpace(index, x, y, actionSpace) {
         actionSpaceDiv.id = "actionSpace|" + newX + "|" + newY;
         actionSpaceDiv.onclick = () => {
             console.log(index, actionSpace[i][0], actionSpace[i][1])
-            step(index, actionSpace[i][0], actionSpace[i][1]);
+            if (index >= 16)
+                step(index - 16, actionSpace[i][0], actionSpace[i][1]);
+            else
+                step(index, actionSpace[i][0], actionSpace[i][1]);
             selectedPiece = -1;
         }
         actionSpaceDisplayer.append(actionSpaceDiv);
